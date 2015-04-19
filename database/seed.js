@@ -17,3 +17,5 @@ pg_query.execute(connection_string,
 pg_query.execute(connection_string,
     seed_races_table
 );
+
+//@TODO create seeds for rest of the tables
