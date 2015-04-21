@@ -33,7 +33,6 @@ var execute_read_query = function(query_execution, callback){
     var response = [];
     pg.connect(connection_string_parsed, function(err, client, done) {
         // SQL Query > Select Data
-
         var query = client.query(query_execution);
 
         // Stream results back one row at a time
