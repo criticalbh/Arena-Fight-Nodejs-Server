@@ -10,5 +10,6 @@ var connectionString = function () {
     };
     return connection_string;
 }
+
 exports.connectionString = connectionString;
  
