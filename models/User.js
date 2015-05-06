@@ -16,3 +16,7 @@ exports.findByTwoKeys = function(key1, key2, value1, value2, callback){
          callback(response);
     });
 }
+
+exports.save = function(values, clause){
+    query.execute("UPDATE " + table + " SET " + values + " WHERE " + clause + ";");
+}

@@ -6,6 +6,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var LoginController = require('./controllers/LoginController');
+var Player = require('./controllers/PlayerController');
 var World = require('./app/world');
 var port = process.env.PORT || 3000;
 
@@ -13,32 +14,29 @@ http.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
 
-
-
-
-
 io.on('connection', function (socket) {
-    console.log("connected");
+    World.connectedPlayerNumbers();
+    console.log("Connected: " + World.getNumUsers());
     var addedUser = false;
 
-    LoginController.tryLogin(socket, User, World);
-
-    socket.on('savePlayer', function(object){
-        //save object but first lets make module from this shit authentication :D
-        console.log(object);
+    LoginController.tryLogin(socket, User, World, Player, function callback(response){
+        addedUser = response;
     });
-
+    
 
     // when the user disconnects.. perform this
     socket.on('disconnect', function () {
         // remove the username from global players list
         if (addedUser) {
-            World.deletePlayer(socket)
             // echo globally that this client has left
             socket.broadcast.emit('user left', {
                 username: socket.username,
-                numUsers: numUsers
+                numUsers: World.getNumUsers()
             });
+            console.log(socket.username + " has been disconnected.");
+            World.deletePlayer(socket);
+            World.disconnectedPlayerNumbers();
+            console.log("Connected: " + World.getNumUsers());
         }
     });
 });

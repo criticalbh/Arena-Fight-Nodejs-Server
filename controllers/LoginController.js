@@ -2,7 +2,7 @@
  * Created by critical on 4/19/15.
  */
 
-exports.tryLogin = function(socket, User, World){
+exports.tryLogin = function(socket, User, World, Player, returnValue){
 // trying to log in
     //@TODO handle join and connect races and classes with user
     socket.on('login', function (username, password) {
@@ -32,6 +32,10 @@ exports.tryLogin = function(socket, User, World){
                     numUsers: World.getNumUsers()
                 });
 
+                //save player globally
+                console.log("Logged in: " + socket.username);
+                Player.save(socket, User);
+                returnValue(addedUser);
             }else{
                 //@TODO handle wrong credentials
                 console.log('Wrong username/password');
