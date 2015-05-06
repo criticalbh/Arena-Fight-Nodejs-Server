@@ -6,11 +6,17 @@
 
 exports.save = function(socket, User){
     socket.on('savePlayer', function(object){
-        var values = null;
-       // id: 1, numUsers: 1, first_login: false, race: 2, class: 1
+        var values = "";
+        for(var i in object){
+        	if(i != 'id' && i!='numUsers')
+		  		values += i + "='" + object[i] + "',";
+		}
 
+        values = values.slice(0, -1);
+        var clause = "id=" + object.id;
+        User.save(values, clause);
 
         //save object but first lets make module from this shit authentication :D
-        console.log(object);
+        console.log(values);
     });
 }
