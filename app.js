@@ -15,13 +15,35 @@ http.listen(port, function () {
 });
 
 io.on('connection', function (socket) {
+
     World.connectedPlayerNumbers();
     console.log("Connected: " + World.getNumUsers());
     var addedUser = false;
-
     LoginController.tryLogin(socket, User, World, Player, function callback(response){
         addedUser = response;
     });
+   
+    socket.on('checkFirst', function(){
+      if(World.getFirstPlayer() == false){
+	socket.emit("firstPlayer", {first: true});
+	World.setFirstPlayer(true);
+	console.log(socket.username + " was first player");
+      }else{
+	socket.emit("firstPlayer", {first: false});
+	console.log(socket.username + " was second player");
+      }
+    });
+    
+    socket.on('player_running', function(){
+      socket.broadcast.emit('run');
+    });
+    
+    socket.on('player_jump', function(){
+      socket.broadcast.emit('jump');
+    });
+
+  
+
     
 
     // when the user disconnects.. perform this
