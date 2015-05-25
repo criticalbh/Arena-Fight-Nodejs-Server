@@ -34,6 +34,16 @@ io.on('connection', function (socket) {
       }
     });
     
+    socket.on('bulletShot', function(player){
+      socket.broadcast.emit("bulletShotResponse", {first: player});
+    });
+    
+    socket.on('resetFirstPlayer', function(player){
+      console.log("reseted");
+      World.setFirstPlayer(false);
+    });
+    
+    
     socket.on('player_running', function(){
       socket.broadcast.emit('run');
     });
